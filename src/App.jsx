@@ -1,4 +1,4 @@
-import movies from "./movies.json";
+import movies from "./data/movies.json";
 
 function MovieCard({ movie }) {
   return (
@@ -12,7 +12,7 @@ function MovieCard({ movie }) {
       <h3>{movie.title}</h3>
 
       <p className="meta">
-        {movie.genre} • {movie.rating}
+        {movie.genre}   {movie.rating}
       </p>
 
       <button>Add to Watchlist</button>
