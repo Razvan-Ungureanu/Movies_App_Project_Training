@@ -1,6 +1,14 @@
 import { useState } from "react";
 import movies from "./data/movies.json";
 
+function getRatingClass(rating) {
+  const r = Number(rating);
+
+  if (r >= 8) return "rating-good";
+  if (r >= 5) return "rating-mid";
+  return "rating-bad";
+}
+
 function MovieCard({ movie }) {
   return (
     <div className="card">
@@ -13,7 +21,10 @@ function MovieCard({ movie }) {
       <h3>{movie.title}</h3>
 
       <p className="meta">
-        {movie.genre}   {movie.rating}
+      {movie.genre} 
+      <span className={getRatingClass(movie.rating)}>
+        {movie.rating}
+        </span>
       </p>
 
       <button>Add to Watchlist</button>
@@ -24,10 +35,19 @@ function MovieCard({ movie }) {
 export default function App() {
   const [sortType, setSortType] = useState("none");
   const [search, setSearch] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("all");
 
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const genres = [...new Set(movies.map((movie) => movie.genre))];
+
+  const filteredMovies = movies.filter((movie) => {
+    const matchesSearch = movie.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    const matchesGenre = selectedGenre === "all" || movie.genre === selectedGenre;
+
+    return matchesSearch && matchesGenre;
+  });
 
   const sortedMovies = [...filteredMovies];
 
@@ -56,8 +76,16 @@ export default function App() {
       <div className="filters">
         <div className="filter">
           <span>Genre</span>
-          <select>
-            <option>All Genres</option>
+          <select
+            value={selectedGenre}
+            onChange={(e) => setSelectedGenre(e.target.value)}
+          >
+            <option value="all">All Genres</option>
+            {genres.map((genre) => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
           </select>
         </div>
 
