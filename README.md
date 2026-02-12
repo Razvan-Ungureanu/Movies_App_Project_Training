@@ -1,7 +1,7 @@
 ### Home
 
-![Home Page](./assets/home.png)
+![Home Page](./src/assets/home.png)
 
 ### Sort-Filter
 
-![Sort-Filter](./assets/sortfilter.png)
+![Sort-Filter](./src/assets/sortfilter.png)
