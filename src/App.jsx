@@ -1,3 +1,4 @@
+import { useState } from "react";
 import movies from "./data/movies.json";
 
 function MovieCard({ movie }) {
@@ -21,6 +22,23 @@ function MovieCard({ movie }) {
 }
 
 export default function App() {
+  const [sortType, setSortType] = useState("none");
+  const [search, setSearch] = useState("");
+
+  const filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const sortedMovies = [...filteredMovies];
+
+  if (sortType === "rating-desc") {
+    sortedMovies.sort((a, b) => Number(b.rating) - Number(a.rating));
+  } else if (sortType === "rating-asc") {
+    sortedMovies.sort((a, b) => Number(a.rating) - Number(b.rating));
+  } else if (sortType === "alphabet") {
+    sortedMovies.sort((a, b) => a.title.localeCompare(b.title));
+  }
+
   return (
     <div className="container">
       <div className="nav">
@@ -31,6 +49,8 @@ export default function App() {
       <input
         className="search"
         placeholder="Search movies..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
       />
 
       <div className="filters">
@@ -47,10 +67,20 @@ export default function App() {
             <option>All</option>
           </select>
         </div>
+
+        <div className="filter">
+          <span>Sort</span>
+          <select value={sortType} onChange={(e) => setSortType(e.target.value)}>
+            <option value="none">None</option>
+            <option value="rating-desc">Rating (High to Low)</option>
+            <option value="rating-asc">Rating (Low to High)</option>
+            <option value="alphabet">A-Z</option>
+          </select>
+        </div>
       </div>
 
       <div className="grid">
-        {movies.map((m) => (
+        {sortedMovies.map((m) => (
           <MovieCard key={m.id} movie={m} />
         ))}
       </div>
