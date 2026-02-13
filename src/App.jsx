@@ -1,5 +1,6 @@
 import { useState } from "react";
 import movies from "./data/movies.json";
+import useWatchlist from "./hooks/useWatchlist";
 
 function getRatingClass(rating) {
   const r = Number(rating);
@@ -9,43 +10,44 @@ function getRatingClass(rating) {
   return "rating-bad";
 }
 
-function MovieCard({ movie }) {
+function MovieCard({ movie, isInWatchlist, onToggleWatchlist }) {
+  const inList = isInWatchlist(movie.id);
+
   return (
     <div className="card">
-      <img
-        className="poster"
-        src={`/images/${movie.image}`}
-        alt={movie.title}
-      />
+      <img className="poster" src={`/images/${movie.image}`} alt={movie.title} />
 
       <h3>{movie.title}</h3>
 
       <p className="meta">
-      {movie.genre} 
-      <span className={getRatingClass(movie.rating)}>
-        {movie.rating}
-        </span>
+        {movie.genre}{" "}
+        <span className={getRatingClass(movie.rating)}>{movie.rating}</span>
       </p>
 
-      <button>Add to Watchlist</button>
+      <button
+        className={inList ? "btn-watchlist in" : "btn-watchlist"}
+        onClick={() => onToggleWatchlist(movie.id)}
+      >
+        {inList ? "In Watchlist" : "Add to Watchlist"}
+      </button>
     </div>
   );
 }
 
 export default function App() {
+  const [tab, setTab] = useState("home"); // "home" | "watchlist"
+
   const [sortType, setSortType] = useState("none");
   const [search, setSearch] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("all");
 
+  const { watchlistIds, isInWatchlist, toggle } = useWatchlist();
+
   const genres = [...new Set(movies.map((movie) => movie.genre))];
 
   const filteredMovies = movies.filter((movie) => {
-    const matchesSearch = movie.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
+    const matchesSearch = movie.title.toLowerCase().includes(search.toLowerCase());
     const matchesGenre = selectedGenre === "all" || movie.genre === selectedGenre;
-
     return matchesSearch && matchesGenre;
   });
 
@@ -54,64 +56,93 @@ export default function App() {
   if (sortType === "rating-desc") {
     sortedMovies.sort((a, b) => Number(b.rating) - Number(a.rating));
   } else if (sortType === "rating-asc") {
-    sortedMovies.sort((a, b) => Number(a.rating) - Number(b.rating));
+    sortedMovies.sort((a, b) => Number(a.rating) - Number(a.rating));
   } else if (sortType === "alphabet") {
     sortedMovies.sort((a, b) => a.title.localeCompare(b.title));
   }
 
+  const watchlistMovies = movies.filter((m) => watchlistIds.includes(m.id));
+
+  const moviesToRender = tab === "home" ? sortedMovies : watchlistMovies;
+
   return (
     <div className="container">
       <div className="nav">
-        <button className="nav-btn active">Home</button>
-        <button className="nav-btn">Watchlist</button>
+        <button
+          className={`nav-btn ${tab === "home" ? "active" : ""}`}
+          onClick={() => setTab("home")}
+        >
+          Home
+        </button>
+
+        <button
+          className={`nav-btn ${tab === "watchlist" ? "active" : ""}`}
+          onClick={() => setTab("watchlist")}
+        >
+          Watchlist{watchlistIds.length ? ` (${watchlistIds.length})` : ""}
+        </button>
       </div>
 
-      <input
-        className="search"
-        placeholder="Search movies..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      {/* Filtrele au sens doar pe Home */}
+      {tab === "home" && (
+        <>
+          <input
+            className="search"
+            placeholder="Search movies..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
-      <div className="filters">
-        <div className="filter">
-          <span>Genre</span>
-          <select
-            value={selectedGenre}
-            onChange={(e) => setSelectedGenre(e.target.value)}
-          >
-            <option value="all">All Genres</option>
-            {genres.map((genre) => (
-              <option key={genre} value={genre}>
-                {genre}
-              </option>
-            ))}
-          </select>
+          <div className="filters">
+            <div className="filter">
+              <span>Genre</span>
+              <select
+                value={selectedGenre}
+                onChange={(e) => setSelectedGenre(e.target.value)}
+              >
+                <option value="all">All Genres</option>
+                {genres.map((genre) => (
+                  <option key={genre} value={genre}>
+                    {genre}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter">
+              <span>Rating</span>
+              <select>
+                <option>All</option>
+              </select>
+            </div>
+
+            <div className="filter">
+              <span>Sort</span>
+              <select value={sortType} onChange={(e) => setSortType(e.target.value)}>
+                <option value="none">None</option>
+                <option value="rating-desc">Rating (High to Low)</option>
+                <option value="rating-asc">Rating (Low to High)</option>
+                <option value="alphabet">A-Z</option>
+              </select>
+            </div>
+          </div>
+        </>
+      )}
+
+      {tab === "watchlist" && watchlistMovies.length === 0 ? (
+        <p style={{ opacity: 0.8 }}>Your watchlist is empty.</p>
+      ) : (
+        <div className="grid">
+          {moviesToRender.map((m) => (
+            <MovieCard
+              key={m.id}
+              movie={m}
+              isInWatchlist={isInWatchlist}
+              onToggleWatchlist={toggle}
+            />
+          ))}
         </div>
-
-        <div className="filter">
-          <span>Rating</span>
-          <select>
-            <option>All</option>
-          </select>
-        </div>
-
-        <div className="filter">
-          <span>Sort</span>
-          <select value={sortType} onChange={(e) => setSortType(e.target.value)}>
-            <option value="none">None</option>
-            <option value="rating-desc">Rating (High to Low)</option>
-            <option value="rating-asc">Rating (Low to High)</option>
-            <option value="alphabet">A-Z</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid">
-        {sortedMovies.map((m) => (
-          <MovieCard key={m.id} movie={m} />
-        ))}
-      </div>
+      )}
     </div>
   );
 }
