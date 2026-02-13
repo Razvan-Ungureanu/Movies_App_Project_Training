@@ -35,7 +35,7 @@ function MovieCard({ movie, isInWatchlist, onToggleWatchlist }) {
 }
 
 export default function App() {
-  const [tab, setTab] = useState("home"); // "home" | "watchlist"
+  const [tab, setTab] = useState("home");
 
   const [sortType, setSortType] = useState("none");
   const [search, setSearch] = useState("");
@@ -83,7 +83,6 @@ export default function App() {
         </button>
       </div>
 
-      {/* Filtrele au sens doar pe Home */}
       {tab === "home" && (
         <>
           <input

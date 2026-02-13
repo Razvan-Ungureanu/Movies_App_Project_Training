@@ -14,7 +14,7 @@ export default function useWatchlist(storageKey = "watchlist") {
     try {
       localStorage.setItem(storageKey, JSON.stringify(watchlistIds));
     } catch {
-      // ignore
+
     }
   }, [storageKey, watchlistIds]);
 
