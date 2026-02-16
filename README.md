@@ -1,3 +1,7 @@
+# Movie App
+
+O aplicație web realizată cu React pentru afișarea și gestionarea unei liste de filme.
+
 ### Home
 
 ![Home Page](./src/assets/home.png)
@@ -5,3 +9,36 @@
 ### Sort-Filter
 
 ![Sort-Filter](./src/assets/sortfilter.png)
+
+---
+
+## Funcționalități
+
+- Căutare filme după titlu
+- Filtrare după gen
+- Sortare după rating:
+  High → Low
+  Low → High
+- Sortare alfabetică (A-Z)
+- Adăugare / eliminare filme din Watchlist
+- Watchlist folosind localStorage
+- Interfață cu design responsive
+
+---
+
+---
+
+##  Instalare și rulare
+
+### Clonează repository-ul
+
+git clone https://github.com/username/movie-app.git
+### Intră în folderul proiectului
+cd movie-app
+### Instalează dependențele
+npm install
+### Rulează aplicația
+npm run dev
+
+## Aplicația va rula la:
+http://localhost:5173

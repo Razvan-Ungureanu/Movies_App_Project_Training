@@ -11,8 +11,6 @@ body {
   padding: 20px;
 }
 
-/* NAVIGATION */
-
 .nav {
   display: flex;
   justify-content: center;
@@ -38,8 +36,6 @@ body {
   transform: scale(1.05);
 }
 
-/* SEARCH */
-
 .search {
   width: 100%;
   padding: 14px 18px;
@@ -48,8 +44,6 @@ body {
   margin-bottom: 16px;
   font-size: 16px;
 }
-
-/* FILTERS */
 
 .filters {
   display: flex;
@@ -74,15 +68,11 @@ body {
   outline: none;
 }
 
-/* GRID */
-
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
-
-/* CARD */
 
 .card {
   background: #151b2d;
@@ -107,8 +97,6 @@ body {
   margin-bottom: 10px;
 }
 
-/* WATCHLIST BUTTON */
-
 .btn-watchlist {
   width: 100%;
   padding: 10px;
@@ -125,8 +113,6 @@ body {
   background: #2c3658;
 }
 
-/* CAND FILMUL ESTE IN WATCHLIST */
-
 .btn-watchlist.in {
   background: #ff9f1c;
   color: black;
@@ -136,8 +122,6 @@ body {
 .btn-watchlist.in:hover {
   background: #ffb347;
 }
-
-/* RATING COLORS */
 
 .rating-good {
   background: #1f7a3a;
