@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+// Functia pe care o primeste UseState se executa o singura data la primul render
 export default function useWatchlist(storageKey = "watchlist") {
   const [watchlistIds, setWatchlistIds] = useState(() => {
     try {
@@ -8,8 +9,10 @@ export default function useWatchlist(storageKey = "watchlist") {
     } catch {
       return [];
     }
+    // Aici pur si simplu dupa JSON.parse ramane in watchlist: [1, 2, 3]
   });
 
+  //De fiecare data cand se schimba watchlistIds, salveaza noua valoare in localStorage
   useEffect(() => {
     try {
       localStorage.setItem(storageKey, JSON.stringify(watchlistIds));
@@ -18,6 +21,7 @@ export default function useWatchlist(storageKey = "watchlist") {
     }
   }, [storageKey, watchlistIds]);
 
+  //Verific daca exista id-ul in array
   const isInWatchlist = (id) => watchlistIds.includes(id);
 
   const add = (id) => {
@@ -28,6 +32,7 @@ export default function useWatchlist(storageKey = "watchlist") {
     setWatchlistIds((prev) => prev.filter((x) => x !== id));
   };
 
+  //Daca exista id-ul, il elimina, daca nu exista, il adauga
   const toggle = (id) => {
     setWatchlistIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
