@@ -1,0 +1,56 @@
+import { useParams, Link } from "react-router-dom";
+import movies from "../data/movies.json";
+import useWatchlist from "../hooks/useWatchlist";
+import { getRatingClass } from "../utils/rating.js";
+
+export default function MovieDetails() {
+  const { id } = useParams();
+  const movieId = Number(id);
+
+  //Cauta in array filmul cu id-ul respectiv, returneaza obiectul film, daca nu il gaseste, returneaza undefined
+  const movie = movies.find((m) => m.id === movieId);
+  const { isInWatchlist, toggle } = useWatchlist();
+
+  if (!movie) {
+    return (
+      <div>
+        <p>Movie not found.</p>
+        <Link to="/movies">← Back to Movies</Link>
+      </div>
+    );
+  }
+
+  const inList = isInWatchlist(movie.id);
+
+  return (
+    <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+      <img
+        className="poster"
+        style={{ width: 260, height: 360 }}
+        src={`/images/${movie.image}`}
+        alt={movie.title}
+      />
+
+      <div>
+        <h2 style={{ marginTop: 0 }}>{movie.title}</h2>
+
+        <p className="meta">
+          {movie.genre}{" "}
+          <span className={getRatingClass(movie.rating)}>{movie.rating}</span>
+        </p>
+
+        <button
+          className={inList ? "btn-watchlist in" : "btn-watchlist"}
+          style={{ maxWidth: 260 }}
+          onClick={() => toggle(movie.id)}
+        >
+          {inList ? "In Watchlist" : "Add to Watchlist"}
+        </button>
+
+        <div style={{ marginTop: 12 }}>
+          <Link to="/movies">← Back to Movies</Link>
+        </div>
+      </div>
+    </div>
+  );
+}
