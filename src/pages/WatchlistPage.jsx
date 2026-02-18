@@ -1,0 +1,26 @@
+
+import movies from "../data/movies.json";
+import useWatchlist from "../hooks/useWatchlist";
+import MovieCard from "../components/MovieCard";
+
+export default function WatchlistPage() {
+  const { watchlistIds, isInWatchlist, toggle } = useWatchlist();
+  const watchlistMovies = movies.filter((m) => watchlistIds.includes(m.id));
+
+  if (watchlistMovies.length === 0) {
+    return <p style={{ opacity: 0.8 }}>Your watchlist is empty.</p>;
+  }
+
+  return (
+    <div className="grid">
+      {watchlistMovies.map((m) => (
+        <MovieCard
+          key={m.id}
+          movie={m}
+          isInWatchlist={isInWatchlist}
+          onToggleWatchlist={toggle}
+        />
+      ))}
+    </div>
+  );
+}
