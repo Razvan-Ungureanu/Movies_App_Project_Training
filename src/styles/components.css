@@ -76,3 +76,18 @@
   font-size: 13px;
   margin-left: 6px;
 }
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container > div[style] {
+  animation: fadeUp 0.25s ease both;
+}
