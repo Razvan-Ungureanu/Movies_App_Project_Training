@@ -6,3 +6,11 @@ export const store = configureStore({
     watchlist: watchlistReducer,
   },
 });
+
+store.subscribe(() => {
+  const state = store.getState();
+  localStorage.setItem(
+    "watchlist",
+    JSON.stringify(state.watchlist.watchlistIds)
+  );
+});
