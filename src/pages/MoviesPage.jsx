@@ -101,7 +101,7 @@ export default function MoviesPage() {
           <MovieCard
             key={m.id}
             movie={m}
-            isInWatchlist={isInWatchlist}
+            isInWatchlist={isInWatchlist(m.id)}
             onToggleWatchlist={toggle}
           />
         ))}
