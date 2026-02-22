@@ -3,7 +3,7 @@ import { getRatingClass } from "../utils/rating";
 
 export default function MovieCard({ movie, isInWatchlist, onToggleWatchlist }) {
   const navigate = useNavigate();
-  const inList = isInWatchlist(movie.id);
+  const inList = isInWatchlist;
 
   return (
     <div className="card">
